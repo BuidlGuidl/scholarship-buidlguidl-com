@@ -12,8 +12,6 @@ import {
   useScaffoldEventHistory,
 } from "~~/hooks/scaffold-eth";
 
-console.log("oldTxns", oldTxns);
-
 const Home: NextPage = () => {
   const { address } = useAccount();
 
@@ -68,22 +66,17 @@ const Home: NextPage = () => {
       }
     }
 
-    let flippedTxns = oldTxns;
-    if (flippedTxns) {
-      flippedTxns = flippedTxns.reverse();
-    }
-
-    for (let i = 0; i < flippedTxns.length; i++) {
-      if (flippedTxns[i].from == "0x924e029aa245abadc5ebd379457eaa48cf0e4422") {
+    for (let i = 0; i < oldTxns.length; i++) {
+      if (oldTxns[i].from == "0x924e029aa245abadc5ebd379457eaa48cf0e4422") {
         newRender.push(
           <div className="card w-96 bg-base-100 shadow-xl w-[600px] items-center m-3">
             <div className="card-body">
               <div className="flex flex-row p-2">
                 <div>
-                  Sent <span className="font-bold">{formatEther(BigInt(flippedTxns[i].value))}</span> to{" "}
+                  Sent <span className="font-bold">{formatEther(BigInt(oldTxns[i].value))}</span> to{" "}
                 </div>
                 <div className="ml-1">
-                  <Address address={flippedTxns[i].to} />
+                  <Address address={oldTxns[i].to} />
                 </div>
               </div>
             </div>
