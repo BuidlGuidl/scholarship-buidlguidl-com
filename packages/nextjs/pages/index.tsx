@@ -40,7 +40,6 @@ const Home: NextPage = () => {
   const [sendEventRender, setSendEventRender] = useState([<div key="loading">loading</div>]);
 
   useEffect(() => {
-    console.log("rendering events", events);
     const newRender = [];
     if (events) {
       for (let i = 0; i < events?.length; i++) {
@@ -48,7 +47,7 @@ const Home: NextPage = () => {
           newRender.push(
             <div
               key={events[i].args.recipient + "_" + events[i].args.amount}
-              className="card w-96 bg-base-100 shadow-xl w-[600px] items-center m-3"
+              className="card w-96 bg-base-100 shadow-xl w-3/4 items-center m-3"
             >
               <div className="card-body">
                 <div className="flex flex-row p-2">
@@ -69,7 +68,7 @@ const Home: NextPage = () => {
     for (let i = 0; i < oldTxns.length; i++) {
       if (oldTxns[i].from == "0x924e029aa245abadc5ebd379457eaa48cf0e4422") {
         newRender.push(
-          <div className="card w-96 bg-base-100 shadow-xl w-[600px] items-center m-3">
+          <div className="card w-96 bg-base-100 shadow-xl w-3/4 items-center m-3">
             <div className="card-body">
               <div className="flex flex-row p-2">
                 <div>
@@ -100,7 +99,7 @@ const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <div className="flex items-center flex-col flex-grow pt-10">
+      <div className="flex items-center flex-col flex-grow pt-10" style={{ transform: "scale(1.69)" }}>
         <Address address={yourContract?.address} /> <Balance address={yourContract?.address} />
       </div>
       {canSendEther ? (
