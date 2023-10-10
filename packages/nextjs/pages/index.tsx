@@ -47,12 +47,14 @@ const Home: NextPage = () => {
           newRender.push(
             <div
               key={events[i].args.recipient + "_" + events[i].args.amount}
-              className="card w-96 bg-base-100 shadow-xl w-3/4 items-center m-3"
+              className="card w-96 bg-base-100 shadow-xl w-5/6 items-center m-3"
             >
               <div className="card-body">
                 <div className="flex flex-row p-2">
                   <div>
-                    Sent <span className="font-bold">{formatEther(events[i].args.amount || 0n)}</span> to{" "}
+                    Sent{" "}
+                    <span className="font-bold">{("" + formatEther(events[i].args.amount || 0n)).substring(0, 6)}</span>{" "}
+                    to{" "}
                   </div>
                   <div className="ml-1">
                     <Address address={events[i].args.recipient} />
@@ -68,11 +70,12 @@ const Home: NextPage = () => {
     for (let i = 0; i < oldTxns.length; i++) {
       if (oldTxns[i].from == "0x924e029aa245abadc5ebd379457eaa48cf0e4422") {
         newRender.push(
-          <div className="card w-96 bg-base-100 shadow-xl w-3/4 items-center m-3">
+          <div className="card w-96 bg-base-100 shadow-xl w-5/6 items-center m-3">
             <div className="card-body">
               <div className="flex flex-row p-2">
                 <div>
-                  Sent <span className="font-bold">{formatEther(BigInt(oldTxns[i].value))}</span> to{" "}
+                  Sent <span className="font-bold">{("" + formatEther(BigInt(oldTxns[i].value))).substring(0, 6)}</span>{" "}
+                  to{" "}
                 </div>
                 <div className="ml-1">
                   <Address address={oldTxns[i].to} />
