@@ -1,19 +1,37 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-// Useful for debugging. Remove when deploying to a live network.
-//import "hardhat/console.sol";
-
-// Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
-// import "@openzeppelin/contracts/access/Ownable.sol";
-
-/**
- * A smart contract that allows changing a state variable of the contract and tracking the changes
- * It also allows the owner to withdraw the Ether in the contract
- * @author BuidlGuidl
+/*
+                                                                                    
+  ####   ####  #    #  ####  #        ##   #####   ####  #    # # #####                   
+ #      #    # #    # #    # #       #  #  #    # #      #    # # #    #                  
+  ####  #      ###### #    # #      #    # #    #  ####  ###### # #    #                  
+      # #      #    # #    # #      ###### #####       # #    # # #####                   
+ #    # #    # #    # #    # #      #    # #   #  #    # #    # # #                       
+  ####   ####  #    #  ####  ###### #    # #    #  ####  #    # # #                       
+                                                                                          
+                                                                                          
+     #####  #    # # #####  #       ####  #    # # #####  #           ####   ####  #    # 
+     #    # #    # # #    # #      #    # #    # # #    # #          #    # #    # ##  ## 
+     #####  #    # # #    # #      #      #    # # #    # #          #      #    # # ## # 
+ ### #    # #    # # #    # #      #  ### #    # # #    # #      ### #      #    # #    # 
+ ### #    # #    # # #    # #      #    # #    # # #    # #      ### #    # #    # #    # 
+ ### #####   ####  # #####  ######  ####   ####  # #####  ###### ###  ####   ####  #    # 
+                                                                                          
  */
 contract ENSContract {
 	function setName(string memory newName) public {
+		//do something
+	}
+}
+contract IERC20 {
+	function transfer(address recipient, uint256 amount) public returns (bool) {
+		//do something
+	}
+}
+
+contract IERC721 {
+	function transferFrom(address from, address to, uint256 tokenId) public {
 		//do something
 	}
 }
@@ -28,8 +46,38 @@ contract YourContract {
 		ensContract.setName(newName);
 	}
 
-	receive() external payable {
-		//use a .call to forward eth to the owner 
-		owner.call{value: msg.value}("");
+	function transferERC20(address tokenAddress, address recipient, uint256 amount) public {
+		require(msg.sender == owner, "Only the owner can transfer ERC20");
+		IERC20(tokenAddress).transfer(recipient, amount);
 	}
+
+	function transferERC721(address tokenAddress, address recipient, uint256 tokenId) public {
+		require(msg.sender == owner, "Only the owner can transfer ERC721");
+		IERC721(tokenAddress).transferFrom(address(this), recipient, tokenId);
+	}
+
+	mapping(address => bool) public canSendEther;
+
+	constructor() {
+		canSendEther[owner] = true;
+	}
+
+	event CanSendEther(address indexed user, bool canSend);
+
+	function setCanSendEther(address user, bool canSend) public {
+		require(msg.sender == owner, "Only the owner can change the name");
+		canSendEther[user] = canSend;
+		emit CanSendEther(user, canSend);
+	}
+
+	event EtherSent(address indexed recipient, uint256 amount);
+
+	function sendEther(address payable recipient, uint256 amount) public {
+		require(canSendEther[msg.sender], "You are not allowed to send Ether");
+		(bool success,) = recipient.call{value: amount}("");
+		require(success, "Failed to send Ether");
+		emit EtherSent(recipient, amount);
+	}
+
+	receive() external payable {}
 }
