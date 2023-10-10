@@ -68,7 +68,10 @@ const Home: NextPage = () => {
       }
     }
 
-    const flippedTxns = oldTxns.reverse();
+    let flippedTxns = oldTxns;
+    if (flippedTxns) {
+      flippedTxns = flippedTxns.reverse();
+    }
 
     for (let i = 0; i < flippedTxns.length; i++) {
       if (flippedTxns[i].from == "0x924e029aa245abadc5ebd379457eaa48cf0e4422") {
